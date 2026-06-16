@@ -1,0 +1,1152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GovWizely — AI, Data & Governance</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* Palette derived from #6F6846 (olive), #525A7A (slate), #58676F (blue-grey) */
+    /* Paketa palette: #58676F (blue-grey) · #525A7A (violet) · #6F6846 (olive) */
+    --paper:        oklch(0.44  0.028 222);   /* #58676F blue-grey — main bg */
+    --paper-2:      oklch(0.38  0.025 222);   /* deeper blue-grey */
+    --band:         oklch(0.40  0.075 266);   /* #525A7A violet — alt sections */
+    --warm:         oklch(0.47  0.070 88);    /* #6F6846 olive — manifesto bg */
+    --rule:         oklch(1.0   0     0   / 0.15);
+    --rule-soft:    oklch(1.0   0     0   / 0.08);
+    --ink:          oklch(0.965 0.008 88);    /* warm cream — main text */
+    --ink-2:        oklch(0.82  0.010 220);   /* secondary text */
+    --ink-3:        oklch(0.64  0.012 220);   /* muted */
+    --accent:       oklch(0.75  0.055 266);   /* lightened slate */
+    --accent-soft:  oklch(0.40  0.075 266 / 0.35);
+    --gold:         oklch(0.80  0.095 88);    /* lightened olive — highlights */
+    --gold-soft:    oklch(0.47  0.070 88  / 0.40);
+
+    --serif: "Instrument Serif", "Newsreader", Georgia, serif;
+    --sans:  "Geist", ui-sans-serif, system-ui, sans-serif;
+    --mono:  "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.55;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--ink);color:var(--paper)}
+
+  a{color:inherit;text-decoration:none}
+
+  /* ------------ Layout primitives ------------ */
+  .wrap{
+    max-width:1280px;
+    margin:0 auto;
+    padding:0 48px;
+  }
+  @media (max-width:720px){ .wrap{padding:0 24px} }
+
+  .rule{height:1px;background:var(--rule);width:100%}
+  .rule-soft{height:1px;background:var(--rule-soft);width:100%}
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .eyebrow .dot{
+    display:inline-block;
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    margin-right:10px;
+    vertical-align:1px;
+  }
+
+  .sec-num{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.14em;
+    color:var(--ink-3);
+    text-transform:uppercase;
+  }
+
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:400;letter-spacing:-0.01em;margin:0;line-height:1.02}
+  h1{font-size:clamp(56px, 9vw, 132px)}
+  h2{font-size:clamp(40px, 5.4vw, 76px); line-height:1.04}
+  h3{font-size:clamp(24px, 2.2vw, 32px); line-height:1.15}
+  h4{font-size:21px; line-height:1.25}
+  p{margin:0}
+  em{font-style:italic}
+
+  /* ------------ Nav ------------ */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:color-mix(in oklab, var(--paper) 88%, transparent);
+    backdrop-filter:saturate(140%) blur(8px);
+    -webkit-backdrop-filter:saturate(140%) blur(8px);
+    border-bottom:1px solid var(--rule-soft);
+  }
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    height:64px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:12px;
+    font-family:var(--serif);
+    font-size:22px;
+    letter-spacing:-0.01em;
+  }
+  .brand-logo{display:block;height:30px;width:auto;flex:none}
+  .foot-logo{display:block;height:50px;width:auto;margin-bottom:20px}
+  .nav-links{display:flex;gap:32px;align-items:center}
+  .nav-links a{
+    font-size:13.5px;
+    color:var(--ink-2);
+    transition:color .2s ease;
+  }
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links a.nav-cta{
+    font-family:var(--sans);
+    font-size:13px;
+    color:var(--ink);
+    padding:9px 16px;
+    border:1px solid #dcb643;
+    border-radius:999px;
+    background:#dcb643;
+    display:inline-flex;align-items:center;gap:8px;
+    white-space:nowrap;
+    transition:background .2s ease, color .2s ease;
+  }
+  .nav-cta:hover{background:transparent;color:#dcb643;border-color:#dcb643}
+  .nav-cta .arrow{font-family:var(--mono);font-size:14px;line-height:1}
+  @media (max-width:780px){
+    .nav-links a:not(.nav-cta){display:none}
+  }
+
+  /* ------------ Hero ------------ */
+  .hero{
+    padding:96px 0 80px;
+    position:relative;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:48px;
+  }
+  .hero-meta{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    gap:24px;flex-wrap:wrap;
+    margin-bottom:40px;
+  }
+  .hero-meta .loc{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--ink-3);
+    text-transform:uppercase;
+  }
+  .hero h1{
+    max-width:14ch;
+  }
+  .hero h1 .it{font-style:italic;color:var(--ink-2)}
+  .hero h1 .acc{color:var(--accent);font-style:italic}
+  .hero-foot{
+    display:grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap:80px;
+    margin-top:72px;
+    align-items:start;
+  }
+  .hero-lede{
+    font-size:19px;
+    line-height:1.55;
+    color:var(--ink-2);
+    max-width:46ch;
+  }
+  .hero-lede strong{color:var(--ink);font-weight:500}
+  .hero-side{
+    display:flex;flex-direction:column;gap:14px;
+    border-left:1px solid var(--rule);
+    padding-left:32px;
+  }
+  .hero-side .row{
+    display:grid;grid-template-columns:120px 1fr;gap:16px;
+    font-size:13.5px;color:var(--ink-2);
+    padding:4px 0;
+  }
+  .hero-side .row .k{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.12em;
+    text-transform:uppercase;color:var(--ink-3);
+    padding-top:2px;
+  }
+  .hero-arch{
+    display:flex;justify-content:center;align-items:center;
+    height:100%;
+    padding:0;
+  }
+  .hero-arch svg{display:block}
+  @media (max-width:860px){
+    .hero-foot{grid-template-columns:1fr;gap:40px}
+    .hero-side{border-left:none;padding-left:0;border-top:1px solid var(--rule);padding-top:24px}
+    .hero-arch{justify-content:flex-start;height:auto}
+  }
+
+  .hero-cta{
+    display:flex;gap:14px;margin-top:36px;flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:14px 22px;
+    border-radius:999px;
+    font-size:14px;
+    border:1px solid var(--ink);
+    transition:all .2s ease;
+  }
+  .btn-primary{background:#dcb643;color:var(--ink);border-color:#dcb643}
+  .btn-primary:hover{background:transparent;color:#dcb643;border-color:#dcb643}
+  .btn-ghost{background:transparent;color:var(--ink)}
+  .btn-ghost:hover{background:var(--ink);color:var(--paper)}
+  .btn .arrow{font-family:var(--mono);font-size:14px;line-height:1}
+
+  /* ------------ Section header ------------ */
+  .sec{padding:120px 0;border-top:1px solid var(--rule)}
+  .sec-head{
+    display:grid;
+    grid-template-columns: 200px 1fr auto;
+    gap:64px;
+    margin-bottom:72px;
+    align-items:center;
+  }
+  .arch-graphic{opacity:0.9}
+  @media (max-width:900px){ .arch-graphic{display:none} }
+  @media (max-width:780px){
+    .sec-head{grid-template-columns:1fr;gap:24px}
+    .sec-head .label{padding-top:0}
+  }
+
+  /* ------------ Capabilities ------------ */
+  .caps{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    border-top:1px solid var(--rule);
+  }
+  .cap{
+    padding:36px 28px 36px 0;
+    border-right:1px solid var(--rule);
+    display:flex;flex-direction:column;gap:18px;
+    min-height:280px;
+  }
+  .cap:nth-child(3n){border-right:none;padding-right:0}
+  .cap:nth-child(n+4){border-top:1px solid var(--rule)}
+  .cap .idx{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--ink-3)}
+  .cap h3{max-width:14ch}
+  .cap p{color:var(--ink-2);font-size:14.5px;line-height:1.6;max-width:38ch}
+  .cap .tags{
+    margin-top:auto;
+    display:flex;gap:8px;flex-wrap:wrap;
+  }
+  .tag{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:4px 9px;
+    border:1px solid var(--rule);
+    border-radius:999px;
+    color:var(--ink-2);
+    background:var(--paper-2);
+  }
+  @media (max-width:920px){
+    .caps{grid-template-columns:repeat(2,1fr)}
+    .cap:nth-child(3n){border-right:1px solid var(--rule);padding-right:28px}
+    .cap:nth-child(2n){border-right:none;padding-right:0}
+    .cap:nth-child(n+3){border-top:1px solid var(--rule)}
+  }
+  @media (max-width:620px){
+    .caps{grid-template-columns:1fr}
+    .cap{border-right:none !important;padding-right:0 !important}
+    .cap:nth-child(n+2){border-top:1px solid var(--rule)}
+  }
+  /* Pillar I has four capabilities — lay them out in a single row on desktop */
+  @media (min-width:921px){
+    .caps-4{grid-template-columns:repeat(4,1fr)}
+    .caps-4 .cap{padding-right:24px}
+    .caps-4 .cap:nth-child(3n){border-right:1px solid var(--rule);padding-right:24px}
+    .caps-4 .cap:nth-child(4n){border-right:none;padding-right:0}
+    .caps-4 .cap:nth-child(n+4){border-top:none}
+  }
+
+  /* ------------ Framework / approach (numbered list) ------------ */
+  .frame{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:0;
+    border-top:1px solid var(--rule);
+  }
+  .frame-item{
+    display:grid;
+    grid-template-columns: 80px 1fr;
+    gap:24px;
+    padding:40px 32px 40px 0;
+    border-bottom:1px solid var(--rule);
+    border-right:1px solid var(--rule);
+    align-items:start;
+  }
+  .frame-item:nth-child(2n){border-right:none;padding-right:0;padding-left:32px}
+  .frame-item:nth-last-child(-n+2){border-bottom:none}
+  .frame-item .num{
+    font-family:var(--serif);
+    font-size:56px;
+    line-height:.9;
+    color:var(--accent);
+    font-style:italic;
+  }
+  .frame-item h4{margin-bottom:10px}
+  .frame-item p{color:var(--ink-2);font-size:14.5px;line-height:1.6;max-width:42ch}
+  @media (max-width:780px){
+    .frame{grid-template-columns:1fr}
+    .frame-item{border-right:none !important;padding:32px 0 !important}
+    .frame-item:nth-last-child(2){border-bottom:1px solid var(--rule)}
+  }
+
+  /* ------------ Quote / manifesto strip ------------ */
+  .manifesto{
+    background:var(--warm);
+    color:var(--ink);
+    padding:140px 0;
+    margin:0;
+  }
+  .manifesto .wrap{position:relative}
+  .manifesto .eyebrow{color:oklch(0.72 0.018 250)}
+  .manifesto .eyebrow .dot{background:oklch(0.78 0.09 235)}
+  .manifesto blockquote{
+    font-family:var(--serif);
+    font-size:clamp(34px, 4.6vw, 64px);
+    line-height:1.12;
+    margin:36px 0 0;
+    max-width:22ch;
+    letter-spacing:-0.01em;
+  }
+  .manifesto blockquote .it{font-style:italic;color:oklch(0.78 0.05 235)}
+  .manifesto .attrib{
+    margin-top:48px;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:48px;
+    padding-top:24px;
+    border-top:1px solid oklch(0.32 0.02 250);
+    font-size:13.5px;color:oklch(0.72 0.018 250);
+  }
+  .manifesto .attrib .k{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;display:block;margin-bottom:6px;color:oklch(0.6 0.02 250)}
+  @media (max-width:720px){.manifesto .attrib{grid-template-columns:1fr;gap:20px}}
+
+  /* ------------ Sectors ------------ */
+  .sectors{
+    display:grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap:64px;
+    align-items:start;
+  }
+  .sectors-list{
+    border-top:1px solid var(--rule);
+  }
+  .sector{
+    display:grid;
+    grid-template-columns: 60px 1fr auto;
+    gap:24px;
+    padding:24px 0;
+    border-bottom:1px solid var(--rule);
+    align-items:center;
+    cursor:default;
+    transition:padding-left .25s ease;
+  }
+  .sector:hover{padding-left:12px}
+  .sector .num{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:0.1em}
+  .sector h4{font-family:var(--serif);font-size:28px;line-height:1.1}
+  .sector .meta{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3)}
+  .sectors-aside{
+    position:sticky;top:96px;
+    padding:32px;
+    background:var(--paper-2);
+    border:1px solid var(--rule);
+    border-radius:6px;
+  }
+  .sectors-aside h3{font-family:var(--serif);font-size:26px;line-height:1.2;margin-bottom:16px;max-width:18ch}
+  .sectors-aside p{color:var(--ink-2);font-size:14.5px;line-height:1.6;margin-bottom:24px}
+  .sectors-aside .stat{
+    display:grid;grid-template-columns: 1fr 1fr;gap:24px;
+    border-top:1px solid var(--rule);padding-top:20px;
+  }
+  .sectors-aside .stat .v{font-family:var(--serif);font-size:42px;line-height:1;color:var(--ink)}
+  .sectors-aside .stat .l{font-family:var(--mono);font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);margin-top:8px;line-height:1.5;display:block}
+
+  /* ---- Reach map ---- */
+  .map-card{
+    margin-bottom:22px;
+    border:1px solid var(--rule);
+    border-radius:6px;
+    background:var(--paper);
+    overflow:hidden;
+  }
+  .map-card svg{display:block;width:100%;height:auto}
+  .map-card .mlabel{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;fill:var(--ink-3)}
+  .map-card .halo{opacity:0.16}
+  @media (prefers-reduced-motion:no-preference){
+    .map-card .halo{
+      transform-box:fill-box;transform-origin:center;
+      animation:ping 3.6s ease-out infinite;
+    }
+  }
+  @keyframes ping{
+    0%{transform:scale(.4);opacity:.30}
+    70%{transform:scale(1.55);opacity:0}
+    100%{transform:scale(1.55);opacity:0}
+  }
+  .map-legend{
+    list-style:none;margin:0 0 24px;padding:0;
+    display:flex;flex-direction:column;gap:11px;
+  }
+  .map-legend li{
+    display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:start;
+    font-size:13px;color:var(--ink-2);line-height:1.45;
+  }
+  .map-legend .pin{
+    flex:none;width:10px;height:10px;border-radius:50%;
+    background:var(--gold);box-shadow:0 0 0 1.5px var(--ink);
+    margin-top:4px;
+  }
+  .map-legend .place{color:var(--ink);font-weight:500}
+  @media (max-width:860px){
+    .sectors{grid-template-columns:1fr;gap:40px}
+    .sectors-aside{position:relative;top:0}
+  }
+  @media (max-width:520px){
+    .sector{grid-template-columns: 40px 1fr;gap:14px}
+    .sector .meta{grid-column:2;font-size:10.5px}
+    .sector h4{font-size:22px}
+  }
+
+  /* ------------ Process ------------ */
+  .proc{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+  }
+  .proc-step{
+    padding:36px 24px 36px 0;
+    border-right:1px solid var(--rule);
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .proc-step:last-child{border-right:none;padding-right:0}
+  .proc-step .stage{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--accent);text-transform:uppercase}
+  .proc-step h4{font-family:var(--serif);font-size:24px;line-height:1.15}
+  .proc-step p{font-size:13.5px;color:var(--ink-2);line-height:1.55}
+  @media (max-width:860px){
+    .proc{grid-template-columns:repeat(2,1fr)}
+    .proc-step:nth-child(2n){border-right:none}
+    .proc-step:nth-child(n+3){border-top:1px solid var(--rule)}
+  }
+  @media (max-width:520px){
+    .proc{grid-template-columns:1fr}
+    .proc-step{border-right:none}
+    .proc-step:nth-child(n+2){border-top:1px solid var(--rule)}
+  }
+
+  /* ------------ CTA / contact ------------ */
+  .cta{
+    padding:140px 0 120px;
+    border-top:1px solid var(--rule);
+  }
+  .cta-grid{
+    display:grid;grid-template-columns: 1.2fr 1fr;gap:80px;align-items:end;
+  }
+  .cta h2{max-width:14ch}
+  .cta h2 .it{font-style:italic;color:var(--ink-2)}
+  .cta-form{
+    display:flex;flex-direction:column;gap:20px;
+  }
+  .cta-line{
+    display:grid;grid-template-columns: 1fr;
+    border-bottom:1px solid var(--rule);
+    padding-bottom:10px;
+  }
+  .cta-line .k{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+  .cta-line input, .cta-line textarea{
+    width:100%;
+    background:transparent;border:none;outline:none;
+    font-family:var(--sans);font-size:18px;color:var(--ink);
+    padding:4px 0;
+    resize:none;
+  }
+  .cta-line input::placeholder, .cta-line textarea::placeholder{color:var(--ink-3);opacity:0.7}
+  .cta-submit{margin-top:16px;align-self:flex-start}
+  [data-fs-error]{font-family:var(--mono);font-size:10.5px;letter-spacing:0.06em;color:oklch(0.72 0.12 20);margin-top:4px;display:block;min-height:0}
+  [data-fs-success]{font-family:var(--serif);font-size:22px;line-height:1.3;color:var(--ink);margin-top:8px;display:none}
+  [data-fs-success]:not(:empty){display:block}
+  @media (max-width:780px){.cta-grid{grid-template-columns:1fr;gap:48px}}
+
+  /* ------------ Footer ------------ */
+  footer{
+    background:var(--band);
+    border-top:1px solid var(--rule);
+    padding:64px 0 40px;
+  }
+  .foot-grid{
+    display:grid;grid-template-columns: 2fr 1fr 1fr 1fr;gap:48px;
+    padding-bottom:48px;border-bottom:1px solid var(--rule);
+  }
+  .foot-brand h3{font-family:var(--serif);font-size:42px;line-height:1;margin-bottom:14px}
+  .foot-brand p{color:var(--ink-2);font-size:14px;max-width:32ch;line-height:1.6}
+  .foot-col h5{
+    font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--ink-3);margin:0 0 16px;
+  }
+  .foot-col ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+  .foot-col a{font-size:14px;color:var(--ink-2);transition:color .2s ease}
+  .foot-col a:hover{color:var(--ink)}
+  .foot-base{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-top:24px;
+    font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-3);
+    flex-wrap:wrap;gap:16px;
+  }
+  @media (max-width:780px){
+    .foot-grid{grid-template-columns:1fr 1fr;gap:36px}
+    .foot-brand{grid-column:1 / -1}
+  }
+  @media (max-width:520px){
+    .foot-grid{grid-template-columns:1fr}
+  }
+
+  /* ------------ Flagship product panel ------------ */
+  .flagship{
+    display:grid;
+    grid-template-columns: 1.55fr 1fr;
+    border:1px solid var(--ink);
+    border-radius:6px;
+    background:var(--paper);
+    overflow:hidden;
+    margin-top:40px;
+  }
+  .flagship-main{padding:38px 38px 34px;border-right:1px solid var(--rule)}
+  .flagship-tag{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--accent);display:flex;align-items:center;gap:9px;margin-bottom:18px;
+  }
+  .flagship-tag .pulse{
+    width:7px;height:7px;border-radius:50%;background:var(--accent);
+    animation:pulse 2.4s ease-out infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 color-mix(in oklab,var(--accent) 55%,transparent)}
+    70%{box-shadow:0 0 0 9px transparent}
+    100%{box-shadow:0 0 0 0 transparent}
+  }
+  .flagship-main h3{font-family:var(--serif);font-size:31px;line-height:1.1;margin-bottom:14px}
+  .flagship-main p{color:var(--ink-2);font-size:15px;line-height:1.62;max-width:56ch;margin-bottom:22px}
+  .flagship-cta{
+    display:flex;align-items:center;gap:22px;flex-wrap:wrap;
+    margin-top:26px;
+  }
+  .flagship-link{
+    font-size:14px;color:var(--ink-2);
+    display:inline-flex;align-items:center;gap:7px;
+    border-bottom:1px solid var(--rule);padding-bottom:2px;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .flagship-link:hover{color:var(--ink);border-color:var(--ink)}
+  .flagship-link .arrow{font-family:var(--mono);font-size:13px}
+  .flagship-side{padding:38px;background:var(--paper-2);display:flex;flex-direction:column}
+  .flagship-side .lbl{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--ink-3);margin-bottom:18px;
+  }
+  .flagship-side ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
+  .flagship-side li{font-size:14px;color:var(--ink);padding-left:18px;position:relative;line-height:1.4}
+  .flagship-side li::before{
+    content:"";position:absolute;left:0;top:6px;width:6px;height:6px;
+    background:var(--accent);
+  }
+  .flagship-more{
+    margin-top:24px;padding-top:18px;border-top:1px solid var(--rule);
+    font-size:13px;color:var(--ink-2);font-style:italic;line-height:1.5;
+  }
+  .caps-label{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--ink-3);margin:48px 0 0;
+  }
+  @media (max-width:780px){
+    .flagship{grid-template-columns:1fr}
+    .flagship-main{border-right:none;border-bottom:1px solid var(--rule)}
+  }
+
+  /* ------------ Pillar headers ------------ */
+  .pillar-header{
+    display:grid;
+    grid-template-columns: 80px 1fr 210px;
+    gap:32px;
+    align-items:center;
+    padding:56px 0 0;
+  }
+  .pillar-graphic{display:flex;justify-content:center;align-items:center}
+  .pillar-graphic svg{display:block;width:190px;height:auto}
+  @media (max-width:900px){
+    .pillar-header{grid-template-columns:80px 1fr}
+    .pillar-graphic{display:none}
+  }
+  .pillar-num{
+    font-family:var(--serif);
+    font-size:96px;
+    line-height:.85;
+    color:var(--accent);
+    font-style:italic;
+    opacity:0.25;
+    padding-top:4px;
+  }
+  .pillar-one-meta{
+    margin-top:26px;
+    display:flex;align-items:center;gap:36px;flex-wrap:wrap;
+  }
+  .pillar-one-list{
+    list-style:none;margin:0;padding:0;
+    display:flex;flex-wrap:wrap;gap:8px 10px;
+  }
+  .pillar-one-list li{
+    font-family:var(--mono);
+    font-size:11px;letter-spacing:0.04em;text-transform:uppercase;
+    color:var(--ink-2);
+    padding:6px 12px;
+    border:1px solid var(--rule);
+    border-radius:999px;
+    background:var(--paper);
+  }
+  @media (max-width:640px){
+    .pillar-header{grid-template-columns:1fr;gap:0}
+    .pillar-num{display:none}
+  }
+
+  /* ------------ Reveal animation ------------ */
+  @media (prefers-reduced-motion:no-preference){
+    .reveal{opacity:0;transform:translateY(14px);transition:opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1)}
+    .reveal.in{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="400" rx="64" fill="#001d33"/>
+    <g transform="translate(70 96) scale(0.65)">
+      <path d="M82 150 A118 118 0 0 1 318 150 L304 150 A104 104 0 0 0 96 150 Z" fill="#fff5de"/>
+      <path d="M96 150 A104 104 0 0 1 304 150 L290 150 A90 90 0 0 0 110 150 Z" fill="#d9b342"/>
+      <line x1="120" y1="298" x2="200" y2="206" stroke="#fff5de" stroke-width="14" stroke-linecap="round"/>
+      <line x1="200" y1="206" x2="280" y2="298" stroke="#fff5de" stroke-width="14" stroke-linecap="round"/>
+      <line x1="95" y1="150" x2="120" y2="298" stroke="#fff5de" stroke-width="30" stroke-linecap="round"/>
+      <line x1="280" y1="298" x2="305" y2="150" stroke="#fff5de" stroke-width="30" stroke-linecap="round"/>
+      <rect x="186" y="206" width="28" height="92" rx="9" fill="#fff5de"/>
+      <rect x="70" y="136" width="50" height="14" rx="4" fill="#fff5de"/>
+      <rect x="280" y="136" width="50" height="14" rx="4" fill="#fff5de"/>
+      <rect x="170" y="192" width="60" height="14" rx="4" fill="#fff5de"/>
+      <rect x="96" y="298" width="48" height="13" rx="4" fill="#d9b342"/>
+      <rect x="176" y="298" width="48" height="13" rx="4" fill="#d9b342"/>
+      <rect x="256" y="298" width="48" height="13" rx="4" fill="#d9b342"/>
+    </g>
+  </svg>
+</template>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <svg class="brand-logo" viewBox="0 22 400 308" aria-hidden="true">
+        <path d="M82 150 A118 118 0 0 1 318 150 L304 150 A104 104 0 0 0 96 150 Z" fill="var(--ink)"/>
+        <path d="M96 150 A104 104 0 0 1 304 150 L290 150 A90 90 0 0 0 110 150 Z" fill="var(--gold)"/>
+        <line x1="120" y1="298" x2="200" y2="206" stroke="var(--ink)" stroke-width="14" stroke-linecap="round"/>
+        <line x1="200" y1="206" x2="280" y2="298" stroke="var(--ink)" stroke-width="14" stroke-linecap="round"/>
+        <line x1="95" y1="150" x2="120" y2="298" stroke="var(--ink)" stroke-width="30" stroke-linecap="round"/>
+        <line x1="280" y1="298" x2="305" y2="150" stroke="var(--ink)" stroke-width="30" stroke-linecap="round"/>
+        <rect x="186" y="206" width="28" height="92" rx="9" fill="var(--ink)"/>
+        <rect x="70" y="136" width="50" height="14" rx="4" fill="var(--ink)"/>
+        <rect x="280" y="136" width="50" height="14" rx="4" fill="var(--ink)"/>
+        <rect x="170" y="192" width="60" height="14" rx="4" fill="var(--ink)"/>
+        <rect x="96" y="298" width="48" height="13" rx="4" fill="var(--gold)"/>
+        <rect x="176" y="298" width="48" height="13" rx="4" fill="var(--gold)"/>
+        <rect x="256" y="298" width="48" height="13" rx="4" fill="var(--gold)"/>
+      </svg>
+      <span>GovWizely</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#pillars">Practice</a>
+      <a href="#sectors">Sectors</a>
+      <a class="nav-cta" href="#contact">Contact us <span class="arrow">→</span></a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-meta reveal">
+      <div class="eyebrow"><span class="dot"></span>AI-Ready Data · Compliance by Design</div>
+      <div class="loc">Est. 2012 · Washington, DC · ⌖ 38.89°N 77.03°W</div>
+    </div>
+
+    <h1 class="reveal">Governing AI,<br /><span class="it" style="color:var(--ink-2)">wisely.</span></h1>
+
+    <div class="hero-foot">
+      <div class="reveal">
+        <p class="hero-lede">
+          We make data <strong>AI-ready</strong>, build <strong>compliance</strong> into the workflow, and keep both improving. Governance as a practice, not a project.
+        </p>
+
+      </div>
+
+      <aside class="hero-side reveal">
+        <div class="hero-arch reveal">
+        <svg viewBox="0 0 280 312" width="170" height="190" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="archFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="var(--accent)" stop-opacity="0.18"/>
+              <stop offset="1" stop-color="var(--accent)" stop-opacity="0.04"/>
+            </linearGradient>
+          </defs>
+
+          <!-- ===== Steps (marble) ===== -->
+          <g stroke="var(--ink)" stroke-width="1">
+            <rect x="8"  y="290" width="264" height="11" fill="url(#archFill)"/>
+            <rect x="24" y="279" width="232" height="11" fill="url(#archFill)"/>
+            <rect x="40" y="268" width="200" height="11" fill="url(#archFill)"/>
+          </g>
+
+          <!-- ===== Pedestals ===== -->
+          <!-- centers at x = 60, 140, 220 -->
+          <g stroke="var(--ink)" stroke-width="1.5">
+            <!-- I -->
+            <rect x="40" y="232" width="40" height="36" fill="url(#archFill)"/>
+            <rect x="37" y="226" width="46" height="7" fill="var(--ink)" opacity="0.45" stroke="none"/>
+            <ellipse cx="60" cy="251" rx="6" ry="9" fill="none" stroke-width="1"/>
+            <!-- II -->
+            <rect x="120" y="232" width="40" height="36" fill="url(#archFill)"/>
+            <rect x="117" y="226" width="46" height="7" fill="var(--ink)" opacity="0.45" stroke="none"/>
+            <ellipse cx="140" cy="251" rx="6" ry="9" fill="none" stroke-width="1"/>
+            <!-- III -->
+            <rect x="200" y="232" width="40" height="36" fill="url(#archFill)"/>
+            <rect x="197" y="226" width="46" height="7" fill="var(--ink)" opacity="0.45" stroke="none"/>
+            <ellipse cx="220" cy="251" rx="6" ry="9" fill="none" stroke-width="1"/>
+          </g>
+
+          <!-- ===== Columns (equal height, fluted) ===== -->
+          <g stroke="var(--ink)" stroke-width="1.5">
+            <!-- I -->
+            <rect x="48" y="136" width="24" height="90" fill="url(#archFill)"/>
+            <g stroke-width="0.75" opacity="0.3">
+              <line x1="54" y1="140" x2="54" y2="222"/>
+              <line x1="60" y1="140" x2="60" y2="222"/>
+              <line x1="66" y1="140" x2="66" y2="222"/>
+            </g>
+            <!-- II -->
+            <rect x="128" y="136" width="24" height="90" fill="url(#archFill)"/>
+            <g stroke-width="0.75" opacity="0.3">
+              <line x1="134" y1="140" x2="134" y2="222"/>
+              <line x1="140" y1="140" x2="140" y2="222"/>
+              <line x1="146" y1="140" x2="146" y2="222"/>
+            </g>
+            <!-- III -->
+            <rect x="208" y="136" width="24" height="90" fill="url(#archFill)"/>
+            <g stroke-width="0.75" opacity="0.3">
+              <line x1="214" y1="140" x2="214" y2="222"/>
+              <line x1="220" y1="140" x2="220" y2="222"/>
+              <line x1="226" y1="140" x2="226" y2="222"/>
+            </g>
+          </g>
+
+          <!-- ===== Entablature beam ===== -->
+          <rect x="16" y="120" width="248" height="16" fill="url(#archFill)" stroke="var(--ink)" stroke-width="1.5"/>
+          <rect x="12" y="115" width="256" height="5" fill="var(--ink)" opacity="0.18" stroke="var(--ink)" stroke-width="1"/>
+          <line x1="16" y1="132" x2="264" y2="132" stroke="var(--ink)" stroke-width="0.75" opacity="0.25"/>
+          <!-- rosette bosses over each column -->
+          <g>
+            <circle cx="60"  cy="128" r="3.2" fill="none" stroke="var(--ink)" stroke-width="1"/>
+            <circle cx="140" cy="128" r="3.2" fill="none" stroke="var(--ink)" stroke-width="1"/>
+            <circle cx="220" cy="128" r="3.2" fill="none" stroke="var(--ink)" stroke-width="1"/>
+            <circle cx="60"  cy="128" r="1.1" fill="var(--ink)"/>
+            <circle cx="140" cy="128" r="1.1" fill="var(--ink)"/>
+            <circle cx="220" cy="128" r="1.1" fill="var(--ink)"/>
+          </g>
+
+          <!-- ===== Semicircular arch spanning the full span ===== -->
+          <!-- band: outer r112, inner r102, centered (140,120) — light to match columns -->
+          <path d="M 28 120 A 112 112 0 0 1 252 120 L 242 120 A 102 102 0 0 0 38 120 Z" fill="url(#archFill)" stroke="var(--ink)" stroke-width="1.5"/>
+          <!-- decorative inner sprigs near apex -->
+          <g stroke="var(--ink)" stroke-width="0.75" fill="none" opacity="0.3">
+            <path d="M 140 22 q 12 7 7 20"/>
+            <path d="M 140 22 q -12 7 -7 20"/>
+            <circle cx="118" cy="36" r="2"/>
+            <circle cx="162" cy="36" r="2"/>
+          </g>
+        </svg>
+      </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- Pillar I -->
+<section id="pillars" style="padding:0 0 0;border-top:1px solid var(--rule);background:var(--band)">
+  <div class="wrap">
+    <div class="pillar-header reveal">
+      <div class="pillar-num">I</div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:8px"><span class="dot"></span>Pillar One</div>
+        <h3 style="font-size:clamp(28px,3.2vw,48px)">Make data <span style="font-style:italic;color:var(--ink-2)">AI-ready.</span></h3>
+        <p style="color:var(--ink-2);font-size:15px;line-height:1.6;max-width:52ch;margin-top:12px">
+          Clean, classified, traceable data — the foundation that lets AI be evaluated, explained, and defended.
+        </p>
+        <div class="pillar-one-meta">
+          <ul class="pillar-one-list">
+            <li>Data Readiness Assessment</li>
+            <li>Lineage &amp; Provenance</li>
+            <li>Catalog, Classification &amp; Access</li>
+            <li>Vectorization &amp; Embeddings</li>
+          </ul>
+          <a class="flagship-link" href="ai-ready-data.html">Explore AI-ready data <span class="arrow">→</span></a>
+        </div>
+      </div>
+      <div class="pillar-graphic reveal">
+        <svg viewBox="0 0 200 200" fill="none" aria-hidden="true">
+          <defs><linearGradient id="gI" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="var(--accent)" stop-opacity="0.18"/>
+            <stop offset="1" stop-color="var(--accent)" stop-opacity="0.04"/>
+          </linearGradient></defs>
+          <!-- cylinder body -->
+          <path d="M45 55 L45 150 A55 18 0 0 0 155 150 L155 55 Z" fill="url(#gI)" stroke="var(--ink)" stroke-width="1.5"/>
+          <!-- top ellipse -->
+          <ellipse cx="100" cy="55" rx="55" ry="18" fill="url(#gI)" stroke="var(--ink)" stroke-width="1.5"/>
+          <!-- bands -->
+          <path d="M45 87 A55 18 0 0 0 155 87" fill="none" stroke="var(--ink)" stroke-width="1" opacity="0.4"/>
+          <path d="M45 119 A55 18 0 0 0 155 119" fill="none" stroke="var(--ink)" stroke-width="1" opacity="0.4"/>
+          <!-- classified record dots on top face -->
+          <circle cx="82" cy="52" r="3.2" fill="var(--accent)"/>
+          <circle cx="100" cy="58" r="3.2" fill="var(--gold)"/>
+          <circle cx="118" cy="52" r="3.2" fill="var(--accent)"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pillar II -->
+<section style="padding:80px 0 0;border-top:1px solid var(--rule)">
+  <div class="wrap">
+    <div class="pillar-header reveal">
+      <div class="pillar-num">II</div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:8px"><span class="dot"></span>Pillar Two</div>
+        <h3 style="font-size:clamp(28px,3.2vw,48px)">Compliance <span style="font-style:italic;color:var(--ink-2)">built in, not bolted on.</span></h3>
+        <p style="color:var(--ink-2);font-size:15px;line-height:1.6;max-width:52ch;margin-top:12px">
+          Compliance belongs inside the workflow, not at the end of it. Backed by working products — our screening tool is live today.
+        </p>
+        <div class="pillar-one-meta">
+          <ul class="pillar-one-list">
+            <li>Screening &amp; Watchlist Compliance</li>
+            <li>Governance Program Design</li>
+            <li>Workflow-Embedded Controls</li>
+            <li>Model Assurance &amp; Public Reporting</li>
+          </ul>
+          <a class="flagship-link" href="compliance-by-design.html">Explore compliance by design <span class="arrow">→</span></a>
+        </div>
+      </div>
+      <div class="pillar-graphic reveal">
+        <svg viewBox="0 0 200 200" fill="none" aria-hidden="true">
+          <defs><linearGradient id="gII" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="var(--accent)" stop-opacity="0.18"/>
+            <stop offset="1" stop-color="var(--accent)" stop-opacity="0.04"/>
+          </linearGradient></defs>
+          <!-- workflow line the shield sits inside -->
+          <line x1="6" y1="100" x2="58" y2="100" stroke="var(--ink)" stroke-width="1" stroke-dasharray="2 5" opacity="0.45"/>
+          <line x1="142" y1="100" x2="194" y2="100" stroke="var(--ink)" stroke-width="1" stroke-dasharray="2 5" opacity="0.45"/>
+          <circle cx="10" cy="100" r="4" fill="none" stroke="var(--ink)" stroke-width="1.2" opacity="0.5"/>
+          <circle cx="190" cy="100" r="4" fill="none" stroke="var(--ink)" stroke-width="1.2" opacity="0.5"/>
+          <!-- shield -->
+          <path d="M100 34 L156 56 C156 112 130 150 100 168 C70 150 44 112 44 56 Z" fill="url(#gII)" stroke="var(--ink)" stroke-width="1.5"/>
+          <!-- inner shield rule -->
+          <path d="M100 46 L146 64 C146 110 124 142 100 157 C76 142 54 110 54 64 Z" fill="none" stroke="var(--ink)" stroke-width="0.75" opacity="0.3"/>
+          <!-- check -->
+          <path d="M78 98 L94 116 L126 78" fill="none" stroke="var(--gold)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pillar III -->
+<section style="padding:80px 0 120px;border-top:1px solid var(--rule);background:var(--band)">
+  <div class="wrap">
+    <div class="pillar-header reveal">
+      <div class="pillar-num">III</div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:8px"><span class="dot"></span>Pillar Three</div>
+        <h3 style="font-size:clamp(28px,3.2vw,48px)">Iterate fast. <span style="font-style:italic;color:var(--ink-2)">Improve continuously.</span></h3>
+        <p style="color:var(--ink-2);font-size:15px;line-height:1.6;max-width:52ch;margin-top:12px">
+          Tight feedback loops, safe rollouts, and continuous improvement — built for environments where failure has real consequences. That includes disciplined token management: controlling cost, latency, and context boundaries so your models stay efficient at scale.
+        </p>
+        <div class="pillar-one-meta">
+          <ul class="pillar-one-list">
+            <li>CI/CD for AI Systems</li>
+            <li>Feedback Loop Design</li>
+            <li>Safe Rollouts &amp; Rollback</li>
+            <li>Managing Tokens</li>
+          </ul>
+          <a class="flagship-link" href="iterate-and-improve.html">Explore iterate &amp; improve <span class="arrow">→</span></a>
+        </div>
+      </div>
+      <div class="pillar-graphic reveal">
+        <svg viewBox="0 0 200 200" fill="none" aria-hidden="true">
+          <defs><linearGradient id="gIII" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="var(--accent)" stop-opacity="0.18"/>
+            <stop offset="1" stop-color="var(--accent)" stop-opacity="0.04"/>
+          </linearGradient></defs>
+          <!-- soft disc -->
+          <circle cx="100" cy="100" r="58" fill="url(#gIII)"/>
+          <!-- top arc (left to right) -->
+          <path d="M42 100 A58 58 0 0 1 158 100" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+          <!-- bottom arc (right to left) -->
+          <path d="M158 100 A58 58 0 0 1 42 100" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+          <!-- arrowheads -->
+          <path d="M158 100 L150 96 L150 104 Z" fill="var(--ink)"/>
+          <path d="M42 100 L50 96 L50 104 Z" fill="var(--ink)"/>
+          <!-- inner dashed ring -->
+          <circle cx="100" cy="100" r="40" fill="none" stroke="var(--ink)" stroke-width="0.75" stroke-dasharray="3 6" opacity="0.35"/>
+          <!-- iteration step nodes -->
+          <circle cx="100" cy="42" r="5" fill="var(--gold)"/>
+          <circle cx="150" cy="129" r="5" fill="var(--accent)"/>
+          <circle cx="50" cy="129" r="5" fill="var(--accent)"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MANIFESTO STRIP ============ -->
+<section class="manifesto">
+  <div class="wrap">
+    <div class="eyebrow reveal"><span class="dot"></span>Position</div>
+    <blockquote class="reveal">
+      Clean data and embedded controls aren't overhead. <span class="it">They're what makes AI trustworthy.</span>
+    </blockquote>
+    <div class="attrib reveal">
+      <div>
+        <span class="k">On AI-ready data</span>
+        A model is only as defensible as the data it was built on.
+      </div>
+      <div>
+        <span class="k">On compliance by design</span>
+        Controls that live in the workflow get used. Controls that live in a binder don't.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTORS ============ -->
+<section class="sec" id="sectors" style="background:var(--band)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="label">
+        <span class="sec-num">§ 01 — Sectors</span>
+      </div>
+      <h2 class="reveal">Where we work.</h2>
+    </div>
+
+    <div class="sectors">
+      <div class="sectors-list reveal">
+        <div class="sector"><span class="num">/01</span><h4>Federal civilian</h4><span class="meta">CIO · CDO · CAIO</span></div>
+        <div class="sector"><span class="num">/02</span><h4>Defense</h4><span class="meta">DoD · Defense-tech</span></div>
+        <div class="sector"><span class="num">/03</span><h4>Healthcare</h4><span class="meta">Clinical · Claims</span></div>
+        <div class="sector"><span class="num">/04</span><h4>Financial services</h4><span class="meta">Model risk · BSA</span></div>
+        <div class="sector"><span class="num">/05</span><h4>Critical infrastructure</h4><span class="meta">Energy · Water · Transit</span></div>
+      </div>
+
+      <aside class="sectors-aside reveal" style="padding:0">
+        <div class="map-card" style="margin-bottom:0;border-radius:6px;border:1px solid var(--rule)">
+          <svg viewBox="0 0 560 240" role="img" aria-label="Map showing the United States and European Union">
+            <defs>
+              <pattern id="dotfield-geo" width="14" height="14" patternUnits="userSpaceOnUse">
+                <circle cx="1.5" cy="1.5" r="1.2" fill="var(--ink)" opacity="0.10"/>
+              </pattern>
+            </defs>
+            <!-- Ocean -->
+            <rect width="560" height="240" fill="url(#dotfield-geo)"/>
+            <!-- Continental US (equirectangular projection, 130°W–30°E, 20°N–70°N) -->
+            <path d="M19,100 L27,149 L41,166 L46,173 L82,176 L114,203 L140,185 L162,181 L168,193 L169,209 L174,204 L173,191 L191,159 L193,140 L196,134 L210,128 L221,116 L207,113 L186,124 L164,130 L140,107 L116,97 L53,97 L28,97 Z"
+              fill="oklch(0.52 0.040 222)" stroke="oklch(0.72 0.018 220)" stroke-width="0.8" stroke-opacity="0.9"/>
+            <!-- Europe mainland -->
+            <path d="M436,156 L432,154 L424,153 L422,144 L435,128 L440,99 L456,88 L469,83 L483,60 L495,57 L535,60 L532,72 L504,74 L498,108 L518,126 L510,148 L488,130 L478,122 L462,132 L450,150 Z"
+              fill="oklch(0.52 0.040 222)" stroke="oklch(0.72 0.018 220)" stroke-width="0.8" stroke-opacity="0.9"/>
+            <!-- Transatlantic arc -->
+            <path d="M180,155 Q330,40 468,108" fill="none" stroke="var(--ink)" stroke-width="1" opacity="0.25" stroke-dasharray="4 6"/>
+            <!-- US pin (Kansas: 96°W, 39°N) -->
+            <g>
+              <circle class="halo" cx="119" cy="143" r="12" fill="var(--gold)"/>
+              <circle cx="119" cy="143" r="6" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+              <circle cx="119" cy="143" r="2.8" fill="var(--gold)"/>
+            </g>
+            <!-- EU pin (France/Germany: 7°E, 47°N) -->
+            <g>
+              <circle class="halo" cx="480" cy="105" r="12" fill="var(--gold)" style="animation-delay:1.4s"/>
+              <circle cx="480" cy="105" r="6" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+              <circle cx="480" cy="105" r="2.8" fill="var(--gold)"/>
+            </g>
+            <text class="mlabel" x="119" y="232" text-anchor="middle">US</text>
+            <text class="mlabel" x="480" y="232" text-anchor="middle">EU</text>
+          </svg>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA / CONTACT ============ -->
+<section class="cta" id="contact">
+  <div class="wrap">
+    <div>
+      <span class="sec-num">§ 02 — Contact</span>
+      <div data-fs-success style="max-width:560px;margin-top:32px"></div>
+      <form id="govwizely-contact" class="cta-form reveal" style="max-width:560px;margin-top:32px">
+        <div class="cta-line">
+          <span class="k">Name</span>
+          <input type="text" name="name" placeholder="Your name" data-fs-field required />
+          <span data-fs-error="name"></span>
+        </div>
+        <div class="cta-line">
+          <span class="k">Organization</span>
+          <input type="text" name="organization" placeholder="Agency, company, or institution" data-fs-field required />
+          <span data-fs-error="organization"></span>
+        </div>
+        <div class="cta-line">
+          <span class="k">Email</span>
+          <input type="email" name="email" placeholder="name@org.com" data-fs-field required />
+          <span data-fs-error="email"></span>
+        </div>
+        <div class="cta-line">
+          <span class="k">Brief</span>
+          <textarea name="message" rows="3" placeholder="What are you trying to build?" data-fs-field required></textarea>
+          <span data-fs-error="message"></span>
+        </div>
+        <span data-fs-error></span>
+        <button class="btn btn-primary cta-submit" type="submit" data-fs-submit-btn>Send brief <span class="arrow">→</span></button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <svg class="foot-logo" viewBox="0 22 400 308" aria-hidden="true">
+          <path d="M82 150 A118 118 0 0 1 318 150 L304 150 A104 104 0 0 0 96 150 Z" fill="var(--ink)"/>
+          <path d="M96 150 A104 104 0 0 1 304 150 L290 150 A90 90 0 0 0 110 150 Z" fill="var(--gold)"/>
+          <line x1="120" y1="298" x2="200" y2="206" stroke="var(--ink)" stroke-width="14" stroke-linecap="round"/>
+          <line x1="200" y1="206" x2="280" y2="298" stroke="var(--ink)" stroke-width="14" stroke-linecap="round"/>
+          <line x1="95" y1="150" x2="120" y2="298" stroke="var(--ink)" stroke-width="30" stroke-linecap="round"/>
+          <line x1="280" y1="298" x2="305" y2="150" stroke="var(--ink)" stroke-width="30" stroke-linecap="round"/>
+          <rect x="186" y="206" width="28" height="92" rx="9" fill="var(--ink)"/>
+          <rect x="70" y="136" width="50" height="14" rx="4" fill="var(--ink)"/>
+          <rect x="280" y="136" width="50" height="14" rx="4" fill="var(--ink)"/>
+          <rect x="170" y="192" width="60" height="14" rx="4" fill="var(--ink)"/>
+          <rect x="96" y="298" width="48" height="13" rx="4" fill="var(--gold)"/>
+          <rect x="176" y="298" width="48" height="13" rx="4" fill="var(--gold)"/>
+          <rect x="256" y="298" width="48" height="13" rx="4" fill="var(--gold)"/>
+        </svg>
+        <h3>GovWizely<span style="color:var(--gold)">.</span></h3>
+        <p>AI-ready data and compliance built into the workflow.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Practice</h5>
+        <ul>
+          <li><a href="ai-ready-data.html">AI-Ready Data</a></li>
+          <li><a href="compliance-by-design.html">Compliance by Design</a></li>
+          <li><a href="iterate-and-improve.html">Iterate &amp; Improve</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Firm</h5>
+        <ul>
+          <li><a href="#sectors">Where we work</a></li>
+          <li><a href="compliance-by-design.html">Screening product</a></li>
+          <li><a href="#contact">Contact us</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="mailto:hello@govwizely.com">hello@govwizely.com</a></li>
+          <li><a href="#">Washington, DC</a></li>
+          <li><a href="#">LinkedIn ↗</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-base">
+      <div>© 2026 GovWizely, LLC. All rights reserved.</div>
+      <div>SAM.gov registered · DUNS on file</div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+<script>
+  // Staggered reveal — double rAF ensures browser commits opacity:0 before transition starts
+  // Formspree Ajax
+  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+  formspree('initForm', {
+    formElement: '#govwizely-contact',
+    formId: 'xkoazayp',
+    onSuccess: function () {
+      var form = document.getElementById('govwizely-contact');
+      var success = form.previousElementSibling;
+      form.style.display = 'none';
+      success.textContent = 'Brief received — we\'ll be in touch within two business days.';
+    }
+  });
+
+  const revealEls = document.querySelectorAll('.reveal');
+
+  const showEl = (el, index) => {
+    el.style.transitionDelay = ((index % 4) * 60) + 'ms';
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('in')));
+  };
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        showEl(e.target, i);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.04, rootMargin: '0px 0px -20px 0px' });
+
+  revealEls.forEach(el => io.observe(el));
+
+  // Safety net: reveal everything after 600ms in case IO doesn't fire (e.g. preview iframes)
+  setTimeout(() => {
+    revealEls.forEach((el, i) => {
+      if (!el.classList.contains('in')) showEl(el, i);
+    });
+  }, 600);
+</script>
+
+</body>
+</html>
